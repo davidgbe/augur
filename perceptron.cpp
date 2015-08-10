@@ -8,12 +8,17 @@ namespace augur {
 
   Perceptron::Perceptron() {
     weights = NULL;
+    error = 0;
   }
 
   Perceptron::~Perceptron() {
     if(weights != NULL) {
       delete[] weights;
     }
+
+    // if(gradients != NULL) {
+    //   delete[] gradients;
+    // }
   }
 
   void Perceptron::train(double* X, double* Y, int num_features, int num_examples, int num_iterations) {

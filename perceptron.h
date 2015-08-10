@@ -14,9 +14,14 @@ namespace augur {
     private:
       void initialize_weights(int num_features);
       double compute_activation(double* features);
+
       double* weights;
       int num_weights;
       double bias;
+
+      double error;
+      double* gradients;
+      int level;
   };
 }
 
