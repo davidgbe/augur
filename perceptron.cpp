@@ -1,21 +1,18 @@
-#include <stddef.h>
-#include <cstdlib>
-#include <iostream>
 
-#include "perceptron.h"
 
 namespace augur {
 
-  Perceptron::Perceptron() {
+  Perceptron::Perceptron(int pos) {
     weights = NULL;
+    gradients = NULL;
     error = 0;
+    position = pos;
   }
 
   Perceptron::~Perceptron() {
     if(weights != NULL) {
       delete[] weights;
     }
-
     // if(gradients != NULL) {
     //   delete[] gradients;
     // }
@@ -48,13 +45,12 @@ namespace augur {
     bias = 0;
   }
 
-  void Perceptron::predict(double* feature_set, int num_sets, double* predictions) {
-    if(!num_weights) {
-      //throw error
-    }
-    for(int idx = 0; idx < num_sets; ++idx) {
-      predictions[idx] = compute_activation(feature_set + idx * num_weights);
-    }
+  void Perceptron::predict(double* activations, double* prediction) {
+    *prediction = transform(compute_activation(features));
+  }
+
+  double Perceptron::transform(double activation) {
+    return activation;
   }
 
   double Perceptron::compute_activation(double* features) {
@@ -62,12 +58,7 @@ namespace augur {
     for(int f_num = 0; f_num < num_weights; ++f_num) {
       total += ( features[f_num] * weights[f_num] );
     }
-    total += bias;
-    if(total >= 0) {
-      return 1.0;
-    } else {
-      return -1.0;
-    }
+    return total + bias;
   }
 
   double* Perceptron::get_weights() {

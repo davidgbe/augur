@@ -4,16 +4,17 @@
 namespace augur {
   class Perceptron {
     public:
-      Perceptron();
+      Perceptron(int pos);
       ~Perceptron();
       void train(double* X, double* Y, int num_features, int num_examples, int num_iterations);
-      void predict(double* feature_set, int num_sets, double* predictions);
+      void predict(double* activations, double* prediction);
       double* get_weights();
       double get_bias();
       int get_num_weights();
     private:
       void initialize_weights(int num_features);
       double compute_activation(double* features);
+      double transform(double activation);
 
       double* weights;
       int num_weights;
@@ -21,7 +22,8 @@ namespace augur {
 
       double error;
       double* gradients;
-      int level;
+      int position;
+      double prediction;
   };
 }
 

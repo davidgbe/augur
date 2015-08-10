@@ -7,7 +7,9 @@
 namespace augur {
 
   NeuralNet::NeuralNet(int* structure, int num_levels) {
-
+    for(int i = 0; i < num_levels; ++i) {
+      
+    }
   }
 
   NeuralNet::~NeuralNet() {

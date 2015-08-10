@@ -1,7 +1,7 @@
 #ifndef NEURAL_NET_H
 #define NUERAL_NET_H
 
-#include "perceptron.h"
+#include "layer.h"
 
 namespace augur {
   class NeuralNet {
@@ -15,7 +15,7 @@ namespace augur {
       std::string name;
       int* stucture;
       int num_levels;
-
+      std::vector<Layer*> net;
   };
 }
 
