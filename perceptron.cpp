@@ -4,7 +4,7 @@
 
 #include "perceptron.h"
 
-namespace firegod {
+namespace augur {
 
   Perceptron::Perceptron() {
     weights = NULL;
@@ -25,7 +25,7 @@ namespace firegod {
         double y = Y[ex_num];
         if(0 >= y * prediction) {
           for(int f_num = 0; f_num < num_features; ++f_num) {
-            weights[f_num] = weights[f_num]  + y * (*(features_ptr + f_num));
+            weights[f_num] = weights[f_num] + (y * features_ptr[f_num]);
           }
           bias += y;
         }

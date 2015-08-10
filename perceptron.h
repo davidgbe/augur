@@ -1,7 +1,7 @@
 #ifndef PERCEPTRON_H
 #define PERCEPTRON_H
 
-namespace firegod {
+namespace augur {
   class Perceptron {
     public:
       Perceptron();

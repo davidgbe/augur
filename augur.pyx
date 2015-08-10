@@ -3,7 +3,7 @@ from libcpp cimport bool
 from cython.operator cimport dereference as deref
 import numpy as np
 
-cdef extern from "perceptron.h" namespace "firegod":
+cdef extern from "perceptron.h" namespace "augur":
     cdef cppclass Perceptron:
         Perceptron() except +
         void train(double* X, double* Y, int num_features, int num_examples, int num_iterations)
