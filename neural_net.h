@@ -1,11 +1,15 @@
 #ifndef NEURAL_NET_H
-#define NUERAL_NET_H
+#define NEURAL_NET_H
 
 #include "layer.h"
+
+#include <vector>
+#include <string>
 
 namespace augur {
   class NeuralNet {
     public:
+      NeuralNet();
       NeuralNet(int* structure, int num_levels);
       ~NeuralNet();
       void backpropagate_train(double* X, double* Y, int iterations);
@@ -13,7 +17,6 @@ namespace augur {
 
     private:
       std::string name;
-      int* stucture;
       int num_levels;
       std::vector<Layer*> net;
   };

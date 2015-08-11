@@ -3,6 +3,8 @@
 
 #include "perceptron.h"
 
+#include <vector>
+
 namespace augur {
   class Layer {
     public:
