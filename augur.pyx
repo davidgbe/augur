@@ -11,7 +11,7 @@ cdef extern from "neural_net.h" namespace "augur":
         void backpropagate_train(double* X, double* Y, int iterations)
         double predict(double* X)
 
-def run(np.ndarray[np.double_t, ndim=2] X):
+def run(np.ndarray[np.double_t, ndim=1] X):
     cdef int iterations = 200
     X = np.ascontiguousarray(X)
     # Y = np.ascontiguousarray(Y)
@@ -20,6 +20,7 @@ def run(np.ndarray[np.double_t, ndim=2] X):
     #     raise StandardError('Training label matrix must have same number of rows as feature matrix')
     cdef np.ndarray[int, ndim=1, mode="c"] structure = np.ascontiguousarray( np.array([3, 2], dtype=ctypes.c_int) )
     cdef NeuralNet nn =  NeuralNet(&structure[0], 2)
+    nn.predict(&X[0])
 
 
     # print 'predictions:'

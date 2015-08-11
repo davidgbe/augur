@@ -1,5 +1,7 @@
 #include "perceptron.h"
 
+#include <iostream>
+
 namespace augur {
 
   Perceptron::Perceptron(int pos, int num_features) {
@@ -9,6 +11,8 @@ namespace augur {
     position = pos;
     num_weights = num_features;
     initialize_weights();
+    std::cout << "Perceptron initialized at position: ";
+    std::cout << pos << std::endl;
   }
 
   Perceptron::~Perceptron() {
@@ -28,7 +32,7 @@ namespace augur {
     double y = *Y;
     if(0 >= y * prediction) {
       for(int f_num = 0; f_num < num_weights; ++f_num) {
-        weights[f_num] = weights[f_num] + (y * features_ptr[f_num]);
+        weights[f_num] = weights[f_num] + (y * X[f_num]);
       }
       bias += y;
     }
@@ -43,8 +47,8 @@ namespace augur {
     bias = 0;
   }
 
-  void Perceptron::predict(double* activations, int num_activations, double* prediction) {
-    *prediction = transform(compute_activation(features));
+  void Perceptron::predict(double* activations, double* prediction) {
+    *prediction = transform(compute_activation(activations));
   }
 
   double Perceptron::transform(double activation) {
