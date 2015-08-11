@@ -43,7 +43,7 @@ namespace augur {
     bias = 0;
   }
 
-  void Perceptron::predict(double* activations, double* prediction) {
+  void Perceptron::predict(double* activations, int num_activations, double* prediction) {
     *prediction = transform(compute_activation(features));
   }
 

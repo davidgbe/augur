@@ -6,14 +6,22 @@
 #include <vector>
 
 namespace augur {
+
+  struct ThreadInfo {
+    Perceptron* perceptron;
+    double* activations;
+    int num_activations;
+    double* prediction;
+  } info;
+
   class Layer {
     public:
       Layer(int number_of_nodes, int num_features, int level);
       ~Layer();
       double* feed_forward(double* activations, int num_activations);
+      static void perceptron_predict(void* info);
 
     private:
-      void perceptron_predict(Perceptron* target, double* activations, int num_activations, double* prediction);
       int level;
       int num_nodes;
       int num_features;

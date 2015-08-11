@@ -7,7 +7,7 @@ namespace augur {
       Perceptron(int pos, int num_features);
       ~Perceptron();
       void train(double* X, int num_features, double* Y);
-      void predict(double* activations, double* prediction);
+      void predict(double* activations, int num_activations, double* prediction);
       double* get_weights();
       double get_bias();
       int get_num_weights();

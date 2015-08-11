@@ -19,19 +19,32 @@ namespace augur {
     }
   }
 
-  void Layer::perceptron_predict(Perceptron* target, double* activations, int num_activations, double* prediction) {
-    target->predict(activations, num_activations, prediction);
+  void Layer::perceptron_predict(void* info) {
+    info = (ThreadInfo*) info;
+    info->perceptron->predict(info->activations, info->num_activations, info->prediction);
   }
 
   double* Layer::feed_forward(double* activations, int num_activations) {
-    std::thread perceptron_jobs[num_nodes];
-    predictions = new double[num_nodes];
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+    void* status;
+
+    pthread_t threads[num_nodes];
+    double* predictions = new double[num_nodes];
+    ThreadInfo infos[num_nodes];
 
     for(int i = 0; i < num_nodes; ++i) {
-      perceptron_jobs[i] = std::thread(perceptron_predict, perceptrons.at(i), activations, num_activations, predictions + i);
+      infos[i].perceptron = perceptrons.at(i);
+      infos[i].activations = activations;
+      infos[i].num_activations = num_activations;
+      infos[i].prediction = predictions + i;
+
+      int rc = pthread_create(&threads[i], NULL, &perceptron_predict, (infos + i));
     }
     for(int i = 0; i < num_nodes; ++i) {
-      perceptron_jobs[i].join();
+      int rc = pthread_join(threads[i], &status);
+
     }
     return predictions;
   }
