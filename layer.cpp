@@ -1,17 +1,21 @@
 #include <thread>
 
+#include "layer.h"
+
 namespace augur {
 
-  Layer::Layer(int number_of_nodes) {
+  Layer::Layer(int number_of_nodes, int num_feats, int lvl) {
     num_nodes = number_of_nodes;
+    num_features = num_feats;
+    level = lvl;
     for(int i = 0; i < number_of_nodes; ++i) {
-      perceptrons[i] = new Perceptron(number_of_nodes);
+      perceptrons.push_back( new Perceptron(i, num_features) );
     }
   }
 
   Layer::~Layer() {
     for(int i = 0; i < num_nodes; ++i) {
-      delete perceptrons[i];
+      delete perceptrons.at(i);
     }
   }
 
@@ -24,7 +28,7 @@ namespace augur {
     predictions = new double[num_nodes];
 
     for(int i = 0; i < num_nodes; ++i) {
-      perceptron_jobs[i] = std::thread(perceptron_predict, perceptrons[i], activations, num_activations, predictions + i);
+      perceptron_jobs[i] = std::thread(perceptron_predict, perceptrons.at(i), activations, num_activations, predictions + i);
     }
     for(int i = 0; i < num_nodes; ++i) {
       perceptron_jobs[i].join();

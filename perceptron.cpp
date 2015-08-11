@@ -1,12 +1,14 @@
-
+#include "perceptron.h"
 
 namespace augur {
 
-  Perceptron::Perceptron(int pos) {
+  Perceptron::Perceptron(int pos, int num_features) {
     weights = NULL;
     gradients = NULL;
     error = 0;
     position = pos;
+    num_weights = num_features;
+    initialize_weights();
   }
 
   Perceptron::~Perceptron() {
@@ -18,25 +20,21 @@ namespace augur {
     // }
   }
 
-  void Perceptron::train(double* X, double* Y, int num_features, int num_examples, int num_iterations) {
-    initialize_weights(num_features);
-    for(int i = 0; i < num_iterations; ++i) {
-      for(int ex_num = 0; ex_num < num_examples; ++ex_num) {
-        double* features_ptr = X + ex_num * num_features;
-        double prediction = compute_activation(features_ptr);
-        double y = Y[ex_num];
-        if(0 >= y * prediction) {
-          for(int f_num = 0; f_num < num_features; ++f_num) {
-            weights[f_num] = weights[f_num] + (y * features_ptr[f_num]);
-          }
-          bias += y;
-        }
+  void Perceptron::train(double* X, int num_features, double* Y) {
+    if(num_features != num_weights) {
+      //throw an error
+    }
+    double prediction = compute_activation(X);
+    double y = *Y;
+    if(0 >= y * prediction) {
+      for(int f_num = 0; f_num < num_weights; ++f_num) {
+        weights[f_num] = weights[f_num] + (y * features_ptr[f_num]);
       }
+      bias += y;
     }
   }
 
-  void Perceptron::initialize_weights(int num_features) {
-    num_weights = num_features;
+  void Perceptron::initialize_weights() {
     weights = new double[num_weights];
     for(int idx = 0; idx < num_weights; ++idx) {
       weights[idx] = std::rand() % 10;
