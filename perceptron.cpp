@@ -48,7 +48,9 @@ namespace augur {
   }
 
   void Perceptron::predict(double* activations, double* prediction) {
-    *prediction = transform(compute_activation(activations));
+    double p = transform(compute_activation(activations));
+    *prediction = (p >= 0) ? 1.0 : -1.0;
+    std::cout << "prediction: " << p << std::endl;
   }
 
   double Perceptron::transform(double activation) {

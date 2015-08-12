@@ -20,7 +20,7 @@ def run(np.ndarray[np.double_t, ndim=1] X):
     #     raise StandardError('Training label matrix must have same number of rows as feature matrix')
     cdef np.ndarray[int, ndim=1, mode="c"] structure = np.ascontiguousarray( np.array([3, 2], dtype=ctypes.c_int) )
     cdef NeuralNet nn =  NeuralNet(&structure[0], 2)
-    nn.predict(&X[0])
+    print nn.predict(&X[0])
 
 
     # print 'predictions:'

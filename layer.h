@@ -11,7 +11,7 @@ namespace augur {
     public:
       Layer(int number_of_nodes, int num_features, int level);
       ~Layer();
-      double* feed_forward(double* activations, double* predictions);
+      double* feed_forward(double* activations);
       static void* perceptron_predict(void* info);
 
     private:

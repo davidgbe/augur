@@ -30,13 +30,11 @@ namespace augur {
   }
 
   double NeuralNet::predict(double* X) {
-    double* predictions = NULL;
-    net.at(0)->feed_forward(X, predictions);
-    std::cout << predictions[0] << std::endl;
-    // for(int i = 1; i < num_levels; i++) {
-
-    // }
-    return 1.0;
+    double* activations = X;
+    for(int i = 0; i < num_levels; i++) {
+      activations = net.at(i)->feed_forward(activations);
+    }
+    return activations[0];
   }
 
 
