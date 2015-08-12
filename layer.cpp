@@ -6,6 +6,7 @@
 namespace augur {
 
   struct thread_info {
+    int thread_num;
     Perceptron* perceptron;
     double* activations;
     double* prediction;
@@ -29,7 +30,9 @@ namespace augur {
 
   void* Layer::perceptron_predict(void* info) {
     struct thread_info* ptr = (struct thread_info*) info;
+    std::cout << "thread num: " << ptr->thread_num << std::endl;
     ptr->perceptron->predict(ptr->activations, ptr->prediction);
+    std::cout << ptr->thread_num << " end" << std::endl;
     return info;
   }
 
@@ -44,6 +47,7 @@ namespace augur {
     thread_info infos[num_nodes];
 
     for(int i = 0; i < num_nodes; ++i) {
+      infos[i].thread_num = i;
       infos[i].perceptron = perceptrons.at(i);
       infos[i].activations = activations;
       infos[i].prediction = predictions + i;

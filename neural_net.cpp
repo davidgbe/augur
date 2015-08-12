@@ -16,7 +16,6 @@ namespace augur {
       int num_nodes = (i != num_levels - 1) ? structure[i + 1] : 1;
       net.push_back( new Layer(num_nodes, structure[i], i) );
     }
-    std::cout << "here" << std::endl;
   }
 
   NeuralNet::~NeuralNet() {

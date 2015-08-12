@@ -18,7 +18,7 @@ def run(np.ndarray[np.double_t, ndim=1] X):
     # X_test = np.ascontiguousarray(X_test)
     # if X.shape[0] != Y.shape[0]:
     #     raise StandardError('Training label matrix must have same number of rows as feature matrix')
-    cdef np.ndarray[int, ndim=1, mode="c"] structure = np.ascontiguousarray( np.array([3, 2], dtype=ctypes.c_int) )
+    cdef np.ndarray[int, ndim=1, mode="c"] structure = np.ascontiguousarray( np.array([20, 30, 20, 1], dtype=ctypes.c_int) )
     cdef NeuralNet nn =  NeuralNet(&structure[0], 2)
     print nn.predict(&X[0])
 
