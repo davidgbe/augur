@@ -14,9 +14,9 @@ namespace augur {
       ~NeuralNet();
       void backpropagate_train(double* X, double* Y, int iterations);
       double predict(double* X);
-      void generate_errors(double y);
     private:
-      void forward_propagate(double* X, bool store_inputs);
+      void generate_errors(double y);
+      double forward_propagate(double* X, bool store_inputs);
 
       std::string name;
       int num_levels;

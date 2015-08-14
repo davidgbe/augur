@@ -18,6 +18,7 @@ namespace augur {
       void initialize_weights();
       double compute_activation(double* features);
       double transform(double activation);
+      double transform_derivative(double activation);
 
       double* weights;
       int num_weights;

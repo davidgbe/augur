@@ -19,11 +19,10 @@ namespace augur {
     Perceptron* perceptron;
   };
 
-
-
   Layer::Layer(int number_of_nodes, int num_feats, int lvl) {
     num_nodes = number_of_nodes;
     num_features = num_feats;
+    std::cout << "num feats: " << num_features << std::endl;
     level = lvl;
     inputs = NULL;
     std::cout << "Layer at level " << lvl << " initialized" << std::endl;
@@ -33,9 +32,9 @@ namespace augur {
   }
 
   Layer::~Layer() {
-    for(int i = 0; i < num_nodes; ++i) {
-      delete perceptrons.at(i);
-    }
+    // for(int i = 0; i < num_nodes; ++i) {
+    //   delete perceptrons.at(i);
+    // }
   }
 
   void* Layer::perceptron_predict(void* info) {
@@ -51,6 +50,7 @@ namespace augur {
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
     void* status;
+    std::cout << "num_nodes: " << num_nodes << std::endl;
 
     pthread_t threads[num_nodes];
     double* predictions = new double[num_nodes];
@@ -86,6 +86,7 @@ namespace augur {
     struct generate_error_thread_info* ptr = (struct generate_error_thread_info*) thread_info;
     std::cout << "Thread num: " << ptr->thread_num << std::endl;
     ptr->perceptron->generate_error_as_parent(ptr->activations, ptr->children);
+    return thread_info;
   }
 
   void Layer::calculate_perceptron_errors(Layer* higher_layer) {
@@ -110,14 +111,12 @@ namespace augur {
     for(int i = 0; i < num_threads; ++i) {
       int rc = pthread_join(threads[i], &status);
     }
-
-    std::cout << error << std::endl;
   }
 
   void Layer::calculate_root_error(double y) {
-    if(position != 0) {
+    if(level != 0) {
       //throw
     }
-    perceptrons.at(0)->generate_error_as_root(y);
+    perceptrons.at(0)->generate_error_as_root(inputs, y);
   }
 }
