@@ -24,7 +24,7 @@ namespace augur {
   void Perceptron::initialize_weights() {
     weights = new double[num_weights];
     for(int idx = 0; idx < num_weights; ++idx) {
-      weights[idx] = std::rand() % 10;
+      weights[idx] = (std::rand() % 1000) / 1000.0;
       std::cout << weights[idx] << std::endl;
     }
     bias = 0;
