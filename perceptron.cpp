@@ -1,6 +1,7 @@
 #include "perceptron.h"
 
 #include <iostream>
+#include <math.h>
 
 namespace augur {
 
@@ -18,23 +19,6 @@ namespace augur {
   Perceptron::~Perceptron() {
     if(weights != NULL) {
       delete[] weights;
-    }
-    // if(gradients != NULL) {
-    //   delete[] gradients;
-    // }
-  }
-
-  void Perceptron::train(double* X, int num_features, double* Y) {
-    if(num_features != num_weights) {
-      //throw an error
-    }
-    double prediction = compute_activation(X);
-    double y = *Y;
-    if(0 >= y * prediction) {
-      for(int f_num = 0; f_num < num_weights; ++f_num) {
-        weights[f_num] = weights[f_num] + (y * X[f_num]);
-      }
-      bias += y;
     }
   }
 
@@ -54,7 +38,11 @@ namespace augur {
   }
 
   double Perceptron::transform(double activation) {
-    return activation;
+    return tan(activation);
+  }
+
+  double Perceptron::transform_derivative(double activation) {
+    return 1 - pow(tanh(activation), 2.0);
   }
 
   double Perceptron::compute_activation(double* features) {
@@ -75,5 +63,22 @@ namespace augur {
 
   double Perceptron::get_bias() {
     return bias;
+  }
+
+  double Perceptron::get_error() {
+    return error;
+  }
+
+  void Perceptron::generate_error_as_root(double* activations, double y) {
+    error = y - compute_activation(activations);
+  }
+
+  void Perceptron::generate_error_as_parent(double* activations, std::vector<Perceptron*>* children) {
+    double activation = compute_activation(activations);
+    error = 0;
+    for(int i = 0; i < children->size(); ++i) {
+      Perceptron* child = children->at(i);
+      error += (child->error * child->weights[position] * transform_derivative(activation));
+    }
   }
 }
