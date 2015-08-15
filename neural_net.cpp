@@ -27,8 +27,7 @@ namespace augur {
 
   double NeuralNet::forward_propagate(double* X, bool store_inputs) {
     double* activations = X;
-    std::cout << "forward" << std::endl;
-    for(int i = 0; i < num_levels; i++) {
+    for(int i = 0; i < num_levels; ++i) {
       if(store_inputs) {
         net.at(i)->set_inputs(activations);
         activations = net.at(i)->feed_forward(activations, false);
@@ -40,8 +39,12 @@ namespace augur {
   }
 
   void NeuralNet::backpropagate_train(double* X, double* Y, int iterations) {
-    std::cout << forward_propagate(X, true) << std::endl;
-    generate_errors(Y[0]);
+    for(int i = 0; i < iterations; ++i) {
+      std::cout << "guess: " << forward_propagate(X, true) << std::endl;
+      std::cout << "answer " << Y[0] << std::endl;
+      generate_errors(Y[0]);
+      update_all_weights(.01);
+    }
   }
 
   double NeuralNet::predict(double* X) {
@@ -52,9 +55,14 @@ namespace augur {
     net.at(num_levels - 1)->calculate_root_error(y);
     if(num_levels > 1) {
       for(int i = num_levels - 2; i >= 0; --i) {
-        std::cout << "level: " << i << std::endl;
         net.at(i)->calculate_perceptron_errors( net.at(i + 1) );
       }
+    }
+  }
+
+  void NeuralNet::update_all_weights(double learning_rate) {
+    for(int i = 0; i < net.size(); ++i) {
+      net.at(i)->update_perceptron_weights(learning_rate);
     }
   }
 }

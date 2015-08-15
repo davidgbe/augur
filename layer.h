@@ -17,7 +17,7 @@ namespace augur {
       static void* calculate_single_perceptron_error(void* thread_info);
       void calculate_perceptron_errors(Layer* child);
       void calculate_root_error(double y);
-
+      void update_perceptron_weights(double learning_rate);
     private:
       int level;
       int num_nodes;

@@ -14,6 +14,7 @@ namespace augur {
       int get_num_weights();
       void generate_error_as_root(double* activations, double y);
       void generate_error_as_parent(double* activations, std::vector<Perceptron*>* children);
+      void update_weights(double* activations, double learning_rate);
     private:
       void initialize_weights();
       double compute_activation(double* features);

@@ -17,6 +17,7 @@ namespace augur {
     private:
       void generate_errors(double y);
       double forward_propagate(double* X, bool store_inputs);
+      void update_all_weights(double learning_rate);
 
       std::string name;
       int num_levels;

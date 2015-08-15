@@ -25,23 +25,20 @@ namespace augur {
     weights = new double[num_weights];
     for(int idx = 0; idx < num_weights; ++idx) {
       weights[idx] = (std::rand() % 1000) / 1000.0;
-      std::cout << weights[idx] << std::endl;
     }
     bias = 0;
   }
 
   void Perceptron::predict(double* activations, double* prediction) {
     double p = transform(compute_activation(activations));
-    *prediction = (p >= 0) ? 1.0 : -1.0;
-    std::cout << "prediction: " << p << std::endl;
+    *prediction = p;
   }
 
   double Perceptron::transform(double activation) {
-    return tan(activation);
+    return tanh(activation);
   }
 
   double Perceptron::transform_derivative(double activation) {
-    std::cout << "tanh of activ: " << tanh(activation) << std::endl;
     return 1 - pow(tanh(activation), 2.0);
   }
 
@@ -72,17 +69,18 @@ namespace augur {
 
   void Perceptron::generate_error_as_parent(double* activations, std::vector<Perceptron*>* children) {
     double activation = compute_activation(activations);
-    std::cout << "activation: " << activation << std::endl;
     error = 0;
     for(int i = 0; i < children->size(); ++i) {
       Perceptron* child = children->at(i);
-      std::cout << "child error " << child->error << std::endl;
-      std::cout << "child weight " << child->weights[position] << std::endl;
-      std::cout << "transformed " << transform_derivative(activation) << std::endl;
       double diff = (child->error * child->weights[position] * transform_derivative(activation));
-      std::cout << "diff " << diff << std::endl;
       error += diff;
     }
-    std::cout << "Error: " << error << std::endl;
+    std::cout << "error: " << error << std::endl;
+  }
+
+  void Perceptron::update_weights(double* activations, double learning_rate) {
+    for(int i = 0; i < num_weights; ++i) {
+      weights[i] += (learning_rate * activations[i] * error);
+    }
   }
 }

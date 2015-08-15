@@ -39,9 +39,7 @@ namespace augur {
 
   void* Layer::perceptron_predict(void* info) {
     struct feed_forward_thread_info* ptr = (struct feed_forward_thread_info*) info;
-    std::cout << "thread num: " << ptr->thread_num << std::endl;
     ptr->perceptron->predict(ptr->activations, ptr->prediction);
-    std::cout << ptr->thread_num << " end" << std::endl;
     return info;
   }
 
@@ -50,7 +48,6 @@ namespace augur {
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
     void* status;
-    std::cout << "num_nodes: " << num_nodes << std::endl;
 
     pthread_t threads[num_nodes];
     double* predictions = new double[num_nodes];
@@ -70,6 +67,7 @@ namespace augur {
     }
     if(del_activations) {
       delete[] activations;
+      activations = NULL;
     }
 
     return predictions;
@@ -77,14 +75,13 @@ namespace augur {
 
   void Layer::set_inputs(double* in) {
     if(inputs != NULL) {
-      delete[] inputs;
+      //delete[] inputs;
     }
     inputs = in;
   }
 
   void* Layer::calculate_single_perceptron_error(void* thread_info) {
     struct generate_error_thread_info* ptr = (struct generate_error_thread_info*) thread_info;
-    std::cout << "Thread num: " << ptr->thread_num << std::endl;
     ptr->perceptron->generate_error_as_parent(ptr->activations, ptr->children);
     return thread_info;
   }
@@ -118,5 +115,11 @@ namespace augur {
       //throw
     }
     perceptrons.at(0)->generate_error_as_root(inputs, y);
+  }
+
+  void Layer::update_perceptron_weights(double learning_rate) {
+    for(int i = 0; i < perceptrons.size(); ++i) {
+      perceptrons.at(i)->update_weights(inputs, learning_rate);
+    }
   }
 }
